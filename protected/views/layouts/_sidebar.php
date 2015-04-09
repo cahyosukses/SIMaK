@@ -11,7 +11,7 @@
           <!-- /.search form -->
 
           <!-- Sidebar Menu -->
-          <?php //require_once('_sidebar_menu.php'); ?>
+          <?php require_once('_sidebar_menu.php'); ?>
         </section>
         <!-- /.sidebar -->
       </aside>

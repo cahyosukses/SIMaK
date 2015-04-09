@@ -1,59 +1,122 @@
-<?php /* @var $this Controller */ ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="language" content="en" />
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title><?php echo Yii::app()->name; ?></title>
+	<?php
+		$baseUrl = Yii::app()->theme->baseUrl; 
+		$cs = Yii::app()->getClientScript();
+	?>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <!-- Bootstrap 3.3.2 -->
+	<?php $cs->registerCssFile($baseUrl.'/bootstrap/css/bootstrap.min.css'); ?>
+    <!-- Font Awesome Icons -->
+	<?php $cs->registerCssFile($baseUrl.'/font-awesome-4.3.0/css/font-awesome.min.css'); ?>
+    <!-- Ionicons -->
+	<?php $cs->registerCssFile($baseUrl.'/ionicons-2.0.1/css/ionicons.min.css'); ?>
+    <!-- Theme style -->
+	<?php $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css'); ?>
+	<?php $cs->registerCssFile($baseUrl.'/css/skins/skin-blue.min.css'); ?>
+	
+	<?php
+		// Lock Screen
+		if (!Yii::app()->user->isGuest) {
+			Yii::app()->clientScript->registerScript('lock',"
+				var autoLockTimer;
+				window.onload = resetTimer;
+				window.onmousemove = resetTimer;
+				window.onmousedown = resetTimer; // catches touchscreen presses
+				window.onclick = resetTimer;     // catches touchpad clicks
+				window.onscroll = resetTimer;    // catches scrolling with arrow keys
+				window.onkeypress = resetTimer;
+		 
+				function lockScreen() {
+					window.location.href = '".$this->createUrl('site/lockscreen')."';
+				}
+		 
+				function resetTimer() {
+					clearTimeout(autoLockTimer);
+					autoLockTimer = setTimeout(lockScreen, 600000);  // 10 Menit - time is in milliseconds
+				}
+			");
+		}
+	?>
 
-	<!-- blueprint CSS framework -->
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/screen.css" media="screen, projection" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/print.css" media="print" />
-	<!--[if lt IE 8]>
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/ie.css" media="screen, projection" />
-	<![endif]-->
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <!--
+  BODY TAG OPTIONS:
+  =================
+  Apply one or more of the following classes to get the 
+  desired effect
+  |---------------------------------------------------------|
+  | SKINS         | skin-blue                               |
+  |               | skin-black                              |
+  |               | skin-purple                             |
+  |               | skin-yellow                             |
+  |               | skin-red                                |
+  |               | skin-green                              |
+  |---------------------------------------------------------|
+  |LAYOUT OPTIONS | fixed                                   |
+  |               | layout-boxed                            |
+  |               | layout-top-nav                          |
+  |               | sidebar-collapse                        |  
+  |---------------------------------------------------------|
+  
+  -->
+  <body class="skin-blue">
+    <div class="wrapper">
+		
+      <!-- Main Header -->
+	  <?php require_once('_header.php'); ?>
+      
+      <!-- Left side column. contains the logo and sidebar -->
+      <?php require_once('_sidebar.php'); ?>
 
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/main.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo Yii::app()->request->baseUrl; ?>/css/form.css" />
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            Page Header
+            <small>Optional description</small>
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
+            <li class="active">Here</li>
+          </ol>
+        </section>
 
-	<title><?php echo CHtml::encode($this->pageTitle); ?></title>
-</head>
+        <!-- Main content -->
+        <section class="content">
+			
+          <!-- Your Page Content Here -->
+		  <?php echo $content; ?>
 
-<body>
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
 
-<div class="container" id="page">
+      <!-- Main Footer -->
+      <?php require_once('_footer.php'); ?>
 
-	<div id="header">
-		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
-	</div><!-- header -->
+    </div><!-- ./wrapper -->
 
-	<div id="mainmenu">
-		<?php $this->widget('zii.widgets.CMenu',array(
-			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/site/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
-			),
-		)); ?>
-	</div><!-- mainmenu -->
-	<?php if(isset($this->breadcrumbs)):?>
-		<?php $this->widget('zii.widgets.CBreadcrumbs', array(
-			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
-	<?php endif?>
-
-	<?php echo $content; ?>
-
-	<div class="clear"></div>
-
-	<div id="footer">
-		Copyright &copy; <?php echo date('Y'); ?> by My Company.<br/>
-		All Rights Reserved.<br/>
-		<?php echo Yii::powered(); ?>
-	</div><!-- footer -->
-
-</div><!-- page -->
-
-</body>
+    <!-- REQUIRED JS SCRIPTS -->
+    
+    <!-- jQuery 2.1.3 -->
+	<?php $cs->registerScriptFile($baseUrl.'/plugins/jQuery/jQuery-2.1.3.min.js'); ?>
+    <!-- Bootstrap 3.3.2 JS -->
+	<?php $cs->registerScriptFile($baseUrl.'/bootstrap/js/bootstrap.min.js'); ?>
+    <!-- AdminLTE App -->
+	<?php $cs->registerScriptFile($baseUrl.'/js/app.min.js'); ?>
+    
+    <!-- Optionally, you can add Slimscroll and FastClick plugins. 
+          Both of these plugins are recommended to enhance the 
+          user experience -->
+  </body>
 </html>
