@@ -17,6 +17,29 @@
     <!-- Theme style -->
 	<?php $cs->registerCssFile($baseUrl.'/css/AdminLTE.min.css'); ?>
 	<?php $cs->registerCssFile($baseUrl.'/css/skins/skin-blue.min.css'); ?>
+	
+	<?php
+		// Lock Screen
+		if (!Yii::app()->user->isGuest) {
+			Yii::app()->clientScript->registerScript('lock',"
+				var autoLockTimer;
+				window.onload = resetTimer;
+				window.onmousemove = resetTimer;
+				window.onmousedown = resetTimer; // catches touchscreen presses
+				window.onclick = resetTimer;     // catches touchpad clicks
+				window.onscroll = resetTimer;    // catches scrolling with arrow keys
+				window.onkeypress = resetTimer;
+		 
+				function lockScreen() {
+					window.location.href = '".$this->createUrl('site/lockscreen')."';
+				}
+		 
+				function resetTimer() {
+					clearTimeout(autoLockTimer);
+				}
+			");
+		}
+	?>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -45,7 +68,7 @@
   |---------------------------------------------------------|
   
   -->
-  <body class="skin-blue sidebar-collapse">
+  <body class="skin-blue">
     <div class="wrapper">
 		
       <!-- Main Header -->

@@ -107,4 +107,19 @@ class SiteController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+	
+	public function actionLockScreen()
+	{
+		$this->layout = 'login';
+		// save current username    
+		$username = Yii::app()->user->name;
+		 
+		// force logout     
+		Yii::app()->user->logout();
+		 
+		// render form lockscreen
+		$model = new LoginForm(); 
+		$model->username = $username; //set default value 
+		return $this->render('lockScreen',array('model' => $model));     
+	}
 }

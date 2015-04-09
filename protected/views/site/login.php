@@ -1,3 +1,4 @@
+<body class="login-page">
 <?php
 /* @var $this SiteController */
 /* @var $model LoginForm */
