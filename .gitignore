@@ -2,8 +2,18 @@ assets/*
 !assets/.gitignore
 protected/runtime/*
 !protected/runtime/.gitignore
-protected/data/*.db
+#protected/data/*.db
 themes/classic/views/
+
+index-test.php
+protected/commands/*
+protected/config/console.php
+protected/config/test.php
+protected/data/*
+protected/messages/*
+protected/migrations/*
+protected/tests/*
+protected/vendor/*
 
 # =========================
 # Operating System Files
