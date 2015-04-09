@@ -36,6 +36,7 @@
 		 
 				function resetTimer() {
 					clearTimeout(autoLockTimer);
+					autoLockTimer = setTimeout(lockScreen, 600000);  // 10 Menit - time is in milliseconds
 				}
 			");
 		}
