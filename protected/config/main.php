@@ -17,6 +17,7 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
+		'application.extensions.*',
 		'application.modules.rights.*',
         'application.modules.rights.components.*',
 	),
@@ -39,6 +40,7 @@ return array(
 			'class'=>'RWebUser',
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
+			'loginUrl' => array('/site/login'),
 		),
 		'authManager'=>array(
             'class'=>'RDbAuthManager',

@@ -10,7 +10,7 @@ class BaseModel extends CActiveRecord
     {
         return array(
             'datetimeI18NBehavior'=>array(
-                'class'=>'application.extensions.DateTimeI18NBehavior'
+                'class'=>'DateTimeI18NBehavior'
             ),
         );
     }
