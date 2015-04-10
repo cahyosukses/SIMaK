@@ -17,7 +17,7 @@
  * @property integer $updated_date
  * @property integer $updated_by
  */
-class mModule extends CActiveRecord
+class mModule extends BaseModel
 {
 	/**
 	 * @return string the associated database table name

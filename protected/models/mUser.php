@@ -1,5 +1,5 @@
 <?php
-class mUser extends CActiveRecord
+class mUser extends BaseModel
 {
 	public function tableName()
 	{
