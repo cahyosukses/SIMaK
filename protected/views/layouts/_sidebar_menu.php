@@ -1,77 +1,60 @@
+<?php
+if (!Yii::app()->user->isGuest) {
+    if (Yii::app()->user->name == 'admin') {
+        $dependency = new CDbCacheDependency('SELECT max(updated_date) AS t FROM m_module;');
+    } else
+        $dependency = new CDbCacheDependency('SELECT max(um.updated_date) AS t FROM s_user_module um WHERE um.s_user_id =' . Yii::app()->user->id);
+
+
+    if (!Yii::app()->cache->get('hierarchy1m1' . Yii::app()->user->id)) {
+        if (Yii::app()->user->name == 'admin') {
+            $Hierarchy = menu::model()->findAll(['condition' => 'parent_id = \'0\' AND (name = \'m1\' OR name = \'m0\') ', 'order' => 'sort']);
+        } else {
+
+            $criteria = new CDbCriteria;
+            $criteria->with = ['user'];
+            $criteria->compare('parent_id', 0);
+            $criteria->compare('user.s_user_id', Yii::app()->user->id);
+            $criteria->order = 't.sort';
+            $criteria1 = new CDbCriteria;
+            $criteria1->compare('name', 'm1', true, 'OR');
+            $criteria1->compare('name', 'm0', true, 'OR');
+            $criteria->mergeWith($criteria1);
+
+            $Hierarchy = menu::model()->cache(3600, $dependency)->findAll($criteria);
+        }
+        Yii::app()->cache->set('hierarchy1m1' . Yii::app()->user->id, $Hierarchy, 86400, $dependency);
+    } else
+        $Hierarchy = Yii::app()->cache->get('hierarchy1m1' . Yii::app()->user->id);
+
+    if (!Yii::app()->cache->get('hierarchy2m1' . Yii::app()->user->id)) {
+        foreach ($Hierarchy as $Hierarchy) {
+            $models = menu::model()->findByPk($Hierarchy->id);
+            $items[] = $models->getListed();
+        }
+        Yii::app()->cache->set('hierarchy2m1' . Yii::app()->user->id, $items, 86400, $dependency);
+    } else
+        $items = Yii::app()->cache->get('hierarchy2m1' . Yii::app()->user->id);
+}
+?>
+
 <ul class="sidebar-menu">
-    <li class="header">Menu Utama</li>
-	<!-- Optionally, you can add icons to the links -->
-    <li class="active"><a href="#"><span>Halaman Depan</span></a><</li>
-	<li class="treeview">
-		<a href="#"><span>Akademik</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Tahun Akademik</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Jurusan/Program Studi</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Jadwal Kuliah</a></li>
-			<li><a href="#">Tugas Akhir</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Keuangan</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Honor Dosen</a></li>
-			<li><a href="#">Pembayaran Mahasiswa</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Dosen</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Nilai</a></li>
-			<li><a href="#">Satuan Acara Perkuliahan</a></li>
-			<li><a href="#">Soal Ujian</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Mahasiswa</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Pendaftaran Ulang</a></li>
-			<li><a href="#">Penyusunan Rencana Studi</a></li>
-			<li><a href="#">Jadwal</a></li>
-			<li><a href="#">Nilai</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Pimpinan</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Laporan Semester</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Master</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Dosen</a></li>
-			<li><a href="#">Mahasiswa</a></li>
-			<li><a href="#">Mata Kuliah</a></li>
-		</ul>
-    </li>
-    <li class="treeview">
-		<a href="#"><span>Pengaturan</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Institusi</a></li>
-			<li><a href="#">Jurusan/Program Studi</a></li>
-			<li><a href="#">SKS</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Portal</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="#">Berita</a></li>
-			<li><a href="#">Lowongan Kerja</a></li>
-		</ul>
-    </li>
-	<li class="treeview">
-		<a href="#"><span>Administrator</span> <i class="fa fa-angle-left pull-right"></i></a>
-		<ul class="treeview-menu">
-			<li><a href="<?php echo $this->createUrl('/rights'); ?>">Right Management</a></li>
-		</ul>
-    </li>
+	<li class="header">Menu Utama</li>
+	<?php
+		foreach($items as $item)
+		{
+			echo "<li class=\"treeview\">";
+			echo "<a href=\"".$this->createUrl("/".$item['url'][0])."\"><span>".$item['label']."</span> <i class=\"fa fa-angle-left pull-right\"></i></a>";
+			if(isset($item['items']))
+			{
+				echo "<ul class=\"treeview-menu\">";
+				foreach($item['items']as $sub)
+				{
+					echo "<li><a href=\"".$this->createUrl("/".$sub['url'][0])."\">".$sub['label']."<i class=\"fa fa-".$sub['icon']." pull-right\"></i></a></li>";
+				}
+				echo "</ul>";
+			}
+			echo "</li>";
+		}
+	?>
 </ul><!-- /.sidebar-menu -->

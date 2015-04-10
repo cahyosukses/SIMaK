@@ -66,6 +66,9 @@ return array(
 			'password' => '',
 			'charset' => 'utf8',
 		),
+		'cache'=>array(
+            'class'=>'system.caching.CFileCache',
+        ),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
