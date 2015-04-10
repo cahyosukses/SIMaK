@@ -21,7 +21,7 @@ class SiteController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('error','contact','login','captcha'),
+				'actions'=>array('error','contact','login','captcha','lockscreen'),
 				'users'=>array('*'),
 			),
 			array('allow',
@@ -141,18 +141,32 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 	
-	public function actionLockScreen()
+	public function actionLockScreen($user)
 	{
 		$this->layout = 'login';
-		// save current username    
-		$username = Yii::app()->user->name;
-		 
-		// force logout     
-		Yii::app()->user->logout();
-		 
+		
 		// render form lockscreen
 		$model = new LoginForm(); 
-		$model->username = $username; //set default value 
+		$model->username = $user; //set default value 
+		
+		// if it is ajax validation request
+		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+		
+		// collect user input data
+		if(isset($_POST['LoginForm']))
+		{
+			$model->attributes=$_POST['LoginForm'];
+			// validate user input and redirect to the previous page if valid
+			if($model->validate() && $model->login())
+				$this->redirect(Yii::app()->user->returnUrl);
+		}
+		else
+			Yii::app()->user->logout(); // force logout 
+		
 		return $this->render('lockScreen',array('model' => $model));     
 	}
 }

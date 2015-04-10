@@ -2,10 +2,10 @@
 	<!-- Automatic element centering -->
     <div class="lockscreen-wrapper">
       <div class="lockscreen-logo">
-        <a href="../../index2.html"><b>SIM</b>a<b>K</b></a>
+        <b>SIM</b>a<b>K</b>
       </div>
       <!-- User name -->
-      <div class="lockscreen-name">Kenry Wan Nainggolan</div>
+      <div class="lockscreen-name"><?php echo $model->username; ?></div>
 
       <!-- START LOCK SCREEN ITEM -->
       <div class="lockscreen-item">

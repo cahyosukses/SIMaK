@@ -31,7 +31,7 @@
 				window.onkeypress = resetTimer;
 		 
 				function lockScreen() {
-					window.location.href = '".$this->createUrl('/site/lockscreen')."';
+					window.location.href = '".$this->createUrl('/site/lockscreen',array('user'=>Yii::app()->user->name))."';
 				}
 		 
 				function resetTimer() {
