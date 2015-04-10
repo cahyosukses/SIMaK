@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title><?php echo $this->pageTitle; ?></title>
+    <title><?php echo isset($this->pageTitle) ? Yii::app()->name.' - '.$this->pageTitle : Yii::app()->name; ?></title>
 	<?php
 		$baseUrl = Yii::app()->theme->baseUrl; 
 		$cs = Yii::app()->getClientScript();
