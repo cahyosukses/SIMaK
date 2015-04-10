@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title><?php echo Yii::app()->name; ?></title>
+    <title><?php echo $this->pageTitle; ?></title>
 	<?php
 		$baseUrl = Yii::app()->theme->baseUrl; 
 		$cs = Yii::app()->getClientScript();
@@ -83,13 +83,18 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1>
-            Page Header
-            <small>Optional description</small>
+            Universitas Tembus Pandang
           </h1>
-          <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Level</a></li>
-            <li class="active">Here</li>
-          </ol>
+			<?php if(isset($this->breadcrumbs)):?>
+				<?php $this->widget('zii.widgets.CBreadcrumbs', array(
+					'links'=>$this->breadcrumbs,
+					'activeLinkTemplate'=>'<li class="active">{label}</li>',
+					'homeLink'=>'<a href="'.$this->createUrl('/site').'"><i class="fa fa-dashboard"></i> Halaman Depan</a>',
+					'htmlOptions'=>array('class'=>'breadcrumb')
+				)); ?><!-- breadcrumbs -->
+			<?php endif?>
+		  
+          
         </section>
 
         <!-- Main content -->

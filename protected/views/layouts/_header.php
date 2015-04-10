@@ -1,6 +1,6 @@
 <header class="main-header">
 	<!-- Logo -->
-    <a href="index2.html" class="logo"><b>SIM</b>a<b>K</b></a>
+    <a href="<?php echo $this->createUrl('/site'); ?>" class="logo"><b>SIM</b>a<b>K</b></a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
