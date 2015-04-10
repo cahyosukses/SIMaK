@@ -1,7 +1,5 @@
 <?php
-/* @var $this SiteController */
-
-$this->pageTitle='Halaman Depan';
+$this->pageTitle =Yii::app()->name.' - Halaman Depan';
 ?>
 
 <!-- Small boxes (Stat box) -->

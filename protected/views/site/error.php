@@ -1,10 +1,7 @@
 <?php
-/* @var $this SiteController */
-/* @var $error array */
-
-$this->pageTitle='Error';
+$this->pageTitle =Yii::app()->name.' - Kesalahan';
 $this->breadcrumbs=array(
-	'Error',
+	'Kesalahan',
 );
 ?>
 
